@@ -1,18 +1,27 @@
+/* =========================
+   Font Import
+========================= */
 @font-face {
     font-family: 'MyCustomFont';
-    src: url('../fonts/Optima nova LT Black.ttf') format('truetype');
+    src: url('fonts/Optima nova LT Black.ttf') format('truetype');
 }
 
+/* =========================
+   Global Reset
+========================= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* =========================
+   Body / Background
+========================= */
 body {
     font-family: 'MyCustomFont', sans-serif;
 
-    background-image: url('../images/background.png');
+    background-image: url('images/background.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -24,6 +33,7 @@ body {
     min-height: 100vh;
 }
 
+/* Overlay */
 body::before {
     content: "";
     position: fixed;
@@ -32,7 +42,9 @@ body::before {
     z-index: -1;
 }
 
-/* Background Button */
+/* =========================
+   Background Button
+========================= */
 .bg-btn {
     position: fixed;
     top: 15px;
@@ -48,15 +60,26 @@ body::before {
     font-weight: bold;
 
     cursor: pointer;
+    transition: 0.25s;
 }
 
+.bg-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(50, 140, 193, 0.4);
+}
+
+/* =========================
+   Title
+========================= */
 .title {
     text-align: center;
     margin-top: 40px;
     font-size: 3.5rem;
 }
 
-/* Form */
+/* =========================
+   Form
+========================= */
 .form {
     display: flex;
     justify-content: center;
@@ -72,15 +95,31 @@ body::before {
     max-width: 700px;
 }
 
+/* Inputs */
 input {
-    padding: 12px;
+    padding: 12px 14px;
     border-radius: 8px;
-    border: none;
+    border: 1px solid rgba(255, 255, 255, 0.2);
 
-    background: rgba(255,255,255,0.1);
-    color: white;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+
+    outline: none;
+    transition: 0.25s;
 }
 
+input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+input:focus {
+    border-color: #328cc1;
+    box-shadow: 0 0 8px rgba(50, 140, 193, 0.6);
+}
+
+/* =========================
+   Buttons
+========================= */
 button {
     padding: 10px 16px;
     border-radius: 8px;
@@ -88,74 +127,122 @@ button {
 
     background: linear-gradient(135deg, #328cc1, #0b3c5d);
     color: white;
+    font-weight: bold;
+
     cursor: pointer;
+    transition: 0.25s;
 }
 
-/* Cards */
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(50, 140, 193, 0.4);
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+/* =========================
+   List
+========================= */
 ul {
     list-style: none;
+    padding: 0;
 }
 
+/* =========================
+   Card Layout
+========================= */
 li {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 18px;
 
-    background: rgba(0,0,0,0.6);
-    padding: 15px;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+
     margin: 15px auto;
+    padding: 15px;
 
     border-radius: 12px;
     max-width: 600px;
 }
 
-/* Arcana */
+/* =========================
+   Arcana Image (Larger)
+========================= */
 .arcana-img {
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
+
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 8px;
+
+    border: 2px solid rgba(255,255,255,0.25);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.4);
 }
 
-/* Profile */
+/* =========================
+   Profile Image
+========================= */
 .profile-img {
     width: 60px;
     height: 60px;
+
     object-fit: cover;
     border-radius: 8px;
+
+    border: 2px solid rgba(255,255,255,0.2);
 }
 
-/* Text */
+/* =========================
+   Text Layout
+========================= */
 .confidant-info {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
+/* Editable Name */
 .edit-name {
     font-size: 1.2rem;
     font-weight: bold;
+
     background: transparent;
     border: none;
     color: white;
 }
 
+/* Editable Description */
 .edit-desc {
     font-size: 0.9rem;
     margin-top: 6px;
+
     background: transparent;
     border: none;
     color: rgba(255,255,255,0.8);
 }
 
-/* Actions */
+/* =========================
+   Actions
+========================= */
 .actions {
     display: flex;
     flex-direction: column;
     gap: 6px;
 }
 
+/* Dropdown */
 select {
     background: rgba(255,255,255,0.1);
+    color: white;
+    border-radius: 6px;
+    padding: 5px;
+}
+
+/* File Input */
+input[type="file"] {
+    font-size: 0.7rem;
     color: white;
 }

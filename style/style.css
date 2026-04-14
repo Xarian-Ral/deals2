@@ -1,23 +1,14 @@
-/* =========================
-   Font Import
-========================= */
 @font-face {
     font-family: 'MyCustomFont';
     src: url('../fonts/Optima nova LT Black.ttf') format('truetype');
 }
 
-/* =========================
-   Global Reset
-========================= */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* =========================
-   Body / Background
-========================= */
 body {
     font-family: 'MyCustomFont', sans-serif;
 
@@ -33,7 +24,6 @@ body {
     min-height: 100vh;
 }
 
-/* Overlay */
 body::before {
     content: "";
     position: fixed;
@@ -42,9 +32,7 @@ body::before {
     z-index: -1;
 }
 
-/* =========================
-   Background Button
-========================= */
+/* Background Button */
 .bg-btn {
     position: fixed;
     top: 15px;
@@ -60,26 +48,15 @@ body::before {
     font-weight: bold;
 
     cursor: pointer;
-    transition: 0.25s;
 }
 
-.bg-btn:hover {
-    transform: scale(1.05);
-    box-shadow: 0 5px 15px rgba(50, 140, 193, 0.4);
-}
-
-/* =========================
-   Title
-========================= */
 .title {
     text-align: center;
     margin-top: 40px;
-    font-size: 2.5rem;
+    font-size: 3.5rem;
 }
 
-/* =========================
-   Form
-========================= */
+/* Form */
 .form {
     display: flex;
     justify-content: center;
@@ -95,31 +72,15 @@ body::before {
     max-width: 700px;
 }
 
-/* Inputs */
 input {
-    padding: 12px 14px;
+    padding: 12px;
     border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: none;
 
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-
-    outline: none;
-    transition: 0.25s;
+    background: rgba(255,255,255,0.1);
+    color: white;
 }
 
-input::placeholder {
-    color: rgba(255, 255, 255, 0.6);
-}
-
-input:focus {
-    border-color: #328cc1;
-    box-shadow: 0 0 8px rgba(50, 140, 193, 0.6);
-}
-
-/* =========================
-   Buttons
-========================= */
 button {
     padding: 10px 16px;
     border-radius: 8px;
@@ -127,76 +88,64 @@ button {
 
     background: linear-gradient(135deg, #328cc1, #0b3c5d);
     color: white;
-    font-weight: bold;
-
     cursor: pointer;
-    transition: 0.25s;
 }
 
-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(50, 140, 193, 0.4);
-}
-
-button:active {
-    transform: scale(0.95);
-}
-
-/* =========================
-   List
-========================= */
+/* Cards */
 ul {
     list-style: none;
-    padding: 0;
 }
 
-/* Card */
 li {
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(6px);
-
-    margin: 15px auto;
-    padding: 15px;
-
-    border-radius: 12px;
-    max-width: 600px;
-
     display: flex;
     align-items: center;
     gap: 15px;
+
+    background: rgba(0,0,0,0.6);
+    padding: 15px;
+    margin: 15px auto;
+
+    border-radius: 12px;
+    max-width: 600px;
 }
 
-/* Image */
-.confidant-left {
-    flex-shrink: 0;
+/* Arcana */
+.arcana-img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 6px;
 }
 
+/* Profile */
 .profile-img {
     width: 60px;
     height: 60px;
-
     object-fit: cover;
     border-radius: 8px;
-
-    border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
-/* Text layout */
+/* Text */
 .confidant-info {
     flex: 1;
     display: flex;
     flex-direction: column;
 }
 
-.confidant-name {
+.edit-name {
     font-size: 1.2rem;
     font-weight: bold;
+    background: transparent;
+    border: none;
+    color: white;
 }
 
-.confidant-desc {
+.edit-desc {
     font-size: 0.9rem;
     margin-top: 6px;
-    color: rgba(255, 255, 255, 0.8);
+    background: transparent;
+    border: none;
+    color: rgba(255,255,255,0.8);
 }
 
 /* Actions */
@@ -206,8 +155,7 @@ li {
     gap: 6px;
 }
 
-/* File input */
-input[type="file"] {
-    font-size: 0.7rem;
+select {
+    background: rgba(255,255,255,0.1);
     color: white;
 }

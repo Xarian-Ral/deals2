@@ -10,133 +10,164 @@
 
 <body>
 
-    <!-- Background changer button -->
-    <button class="bg-btn" onclick="changeBackground()">Change Background</button>
+<button class="bg-btn" onclick="changeBackground()">Change Background</button>
 
-    <h1 class="title">Confidants</h1>
+<h1 class="title">Confidants</h1>
 
-    <div class="form">
-        <input type="text" id="name" placeholder="Person's Name">
-        <input type="text" id="description" placeholder="Description">
-        <button onclick="addConfidant()">Add</button>
-    </div>
+<div class="form">
+    <input type="text" id="name" placeholder="Person's Name">
+    <input type="text" id="description" placeholder="Description">
+    <button onclick="addConfidant()">Add</button>
+</div>
 
-    <ul id="confidantList"></ul>
+<ul id="confidantList"></ul>
 
-    <script>
-        let confidants = JSON.parse(localStorage.getItem("confidants")) || [];
+<script>
+let confidants = JSON.parse(localStorage.getItem("confidants")) || [];
 
-        // Load saved background
-        const savedBackground = localStorage.getItem("backgroundImage");
-        if (savedBackground) {
-            document.body.style.backgroundImage = `url(${savedBackground})`;
-        }
+const arcanas = [
+"fool","magician","priestess","empress","emperor","hierophant","lovers",
+"chariot","justice","hermit","fortune","strength","hanged man","death",
+"temperance","devil","tower","star","sun","world","judgement","faith","councillor"
+];
 
-        function saveData() {
-            localStorage.setItem("confidants", JSON.stringify(confidants));
-        }
+// Load saved background
+const savedBackground = localStorage.getItem("backgroundImage");
+if (savedBackground) {
+    document.body.style.backgroundImage = `url(${savedBackground})`;
+}
 
-        function renderConfidants() {
-            const list = document.getElementById("confidantList");
-            list.innerHTML = "";
+function saveData() {
+    localStorage.setItem("confidants", JSON.stringify(confidants));
+}
 
-            confidants.forEach((c, index) => {
-                const li = document.createElement("li");
+function renderConfidants() {
+    const list = document.getElementById("confidantList");
+    list.innerHTML = "";
 
-                li.innerHTML = `
-                    <div class="confidant-left">
-                        <img src="${c.img || 'images/default.png'}" class="profile-img">
-                    </div>
+    confidants.forEach((c, index) => {
+        const li = document.createElement("li");
 
-                    <div class="confidant-info">
-                        <span class="confidant-name">${c.name}</span>
-                        <span class="confidant-desc">${c.desc}</span>
-                    </div>
+        const arcanaOptions = `
+            <option value="" ${!c.arcana ? "selected" : ""}>None</option>
+            ${arcanas.map(a =>
+                `<option value="${a}" ${c.arcana === a ? "selected" : ""}>${a}</option>`
+            ).join("")}
+        `;
 
-                    <div class="actions">
-                        <input type="file" accept="image/*" onchange="uploadImage(event, ${index})">
-                        <button onclick="editConfidant(${index})">Edit</button>
-                        <button onclick="deleteConfidant(${index})">Delete</button>
-                    </div>
-                `;
+        li.innerHTML = `
+            <img src="images/arcana/${c.arcana ? c.arcana : 'cardback'}.png" class="arcana-img">
 
-                list.appendChild(li);
-            });
-        }
+            <div class="confidant-left">
+                <img src="${c.img || 'images/default.png'}" class="profile-img">
+            </div>
 
-        function addConfidant() {
-            const name = document.getElementById("name").value;
-            const desc = document.getElementById("description").value;
+            <div class="confidant-info">
+                <input class="edit-name" value="${c.name}" disabled>
+                <input class="edit-desc" value="${c.desc}" disabled>
+            </div>
 
-            if (!name || !desc) return;
+            <div class="actions">
+                <select onchange="changeArcana(${index}, this.value)">
+                    ${arcanaOptions}
+                </select>
 
-            confidants.push({ name, desc, img: "" });
+                <input type="file" accept="image/*" onchange="uploadImage(event, ${index})">
 
-            saveData();
-            renderConfidants();
+                <button onclick="toggleEdit(this, ${index})">Edit</button>
+                <button onclick="deleteConfidant(${index})">Delete</button>
+            </div>
+        `;
 
-            document.getElementById("name").value = "";
-            document.getElementById("description").value = "";
-        }
+        list.appendChild(li);
+    });
+}
 
-        function deleteConfidant(index) {
-            confidants.splice(index, 1);
-            saveData();
-            renderConfidants();
-        }
+function addConfidant() {
+    const name = document.getElementById("name").value;
+    const desc = document.getElementById("description").value;
 
-        function editConfidant(index) {
-            const newName = prompt("Edit name:", confidants[index].name);
-            const newDesc = prompt("Edit description:", confidants[index].desc);
+    if (!name || !desc) return;
 
-            if (newName && newDesc) {
-                confidants[index].name = newName;
-                confidants[index].desc = newDesc;
-                saveData();
-                renderConfidants();
-            }
-        }
+    confidants.push({ name, desc, img: "", arcana: "" });
 
-        function uploadImage(event, index) {
-            const file = event.target.files[0];
-            if (!file) return;
+    saveData();
+    renderConfidants();
 
-            const reader = new FileReader();
+    document.getElementById("name").value = "";
+    document.getElementById("description").value = "";
+}
 
-            reader.onload = function (e) {
-                confidants[index].img = e.target.result;
-                saveData();
-                renderConfidants();
-            };
-
-            reader.readAsDataURL(file);
-        }
-
-        function changeBackground() {
-            const input = document.createElement("input");
-            input.type = "file";
-            input.accept = "image/*";
-
-            input.onchange = function (event) {
-                const file = event.target.files[0];
-                if (!file) return;
-
-                const reader = new FileReader();
-
-                reader.onload = function (e) {
-                    const imgData = e.target.result;
-                    document.body.style.backgroundImage = `url(${imgData})`;
-                    localStorage.setItem("backgroundImage", imgData);
-                };
-
-                reader.readAsDataURL(file);
-            };
-
-            input.click();
-        }
-
+function deleteConfidant(index) {
+    if (confirm("Are you sure you want to delete this confidant?")) {
+        confidants.splice(index, 1);
+        saveData();
         renderConfidants();
-    </script>
+    }
+}
+
+function toggleEdit(btn, index) {
+    const li = btn.parentElement.parentElement;
+    const nameInput = li.querySelector(".edit-name");
+    const descInput = li.querySelector(".edit-desc");
+
+    if (btn.textContent === "Edit") {
+        nameInput.disabled = false;
+        descInput.disabled = false;
+        btn.textContent = "Save";
+    } else {
+        confidants[index].name = nameInput.value;
+        confidants[index].desc = descInput.value;
+
+        nameInput.disabled = true;
+        descInput.disabled = true;
+        btn.textContent = "Edit";
+
+        saveData();
+    }
+}
+
+function changeArcana(index, value) {
+    confidants[index].arcana = value;
+    saveData();
+    renderConfidants();
+}
+
+function uploadImage(event, index) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function (e) {
+        confidants[index].img = e.target.result;
+        saveData();
+        renderConfidants();
+    };
+    reader.readAsDataURL(file);
+}
+
+function changeBackground() {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "image/*";
+
+    input.onchange = function (event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            document.body.style.backgroundImage = `url(${e.target.result})`;
+            localStorage.setItem("backgroundImage", e.target.result);
+        };
+        reader.readAsDataURL(file);
+    };
+
+    input.click();
+}
+
+renderConfidants();
+</script>
 
 </body>
 </html>

@@ -31,7 +31,6 @@ const arcanas = [
 "temperance","devil","tower","star","sun","world","judgement","faith","councillor"
 ];
 
-// Load saved background
 const savedBackground = localStorage.getItem("backgroundImage");
 if (savedBackground) {
     document.body.style.backgroundImage = `url(${savedBackground})`;
@@ -41,12 +40,17 @@ function saveData() {
     localStorage.setItem("confidants", JSON.stringify(confidants));
 }
 
+/* AUTO RESIZE FOR TEXTAREAS */
+function autoResize(el) {
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+}
+
 function renderConfidants() {
     const list = document.getElementById("confidantList");
     list.innerHTML = "";
 
     confidants.forEach((c, index) => {
-        const li = document.createElement("li");
 
         const arcanaOptions = `
             <option value="" ${!c.arcana ? "selected" : ""}>None</option>
@@ -55,16 +59,28 @@ function renderConfidants() {
             ).join("")}
         `;
 
+        const li = document.createElement("li");
+
         li.innerHTML = `
-            <img src="images/arcana/${c.arcana ? c.arcana : 'cardback'}.png" class="arcana-img">
+            <img src="images/arcana/${c.arcana ? c.arcana.replace(/ /g, '-') : 'cardback'}.png"
+                 class="arcana-img">
 
             <div class="confidant-left">
                 <img src="${c.img || 'images/default.png'}" class="profile-img">
             </div>
 
             <div class="confidant-info">
-                <input class="edit-name" value="${c.name}" disabled>
-                <input class="edit-desc" value="${c.desc}" disabled>
+
+                <!-- NAME FIXED: NOW TEXTAREA -->
+                <textarea class="edit-name"
+                          disabled
+                          oninput="autoResize(this)">${c.name}</textarea>
+
+                <!-- DESCRIPTION -->
+                <textarea class="edit-desc"
+                          disabled
+                          oninput="autoResize(this)">${c.desc}</textarea>
+
             </div>
 
             <div class="actions">
@@ -72,7 +88,8 @@ function renderConfidants() {
                     ${arcanaOptions}
                 </select>
 
-                <input type="file" accept="image/*" onchange="uploadImage(event, ${index})">
+                <input type="file" accept="image/*"
+                       onchange="uploadImage(event, ${index})">
 
                 <button onclick="toggleEdit(this, ${index})">Edit</button>
                 <button onclick="deleteConfidant(${index})">Delete</button>
@@ -80,6 +97,10 @@ function renderConfidants() {
         `;
 
         list.appendChild(li);
+
+        // ensure proper sizing on load
+        autoResize(li.querySelector(".edit-name"));
+        autoResize(li.querySelector(".edit-desc"));
     });
 }
 
@@ -89,7 +110,12 @@ function addConfidant() {
 
     if (!name || !desc) return;
 
-    confidants.push({ name, desc, img: "", arcana: "" });
+    confidants.push({
+        name,
+        desc,
+        img: "",
+        arcana: ""
+    });
 
     saveData();
     renderConfidants();
@@ -108,6 +134,7 @@ function deleteConfidant(index) {
 
 function toggleEdit(btn, index) {
     const li = btn.parentElement.parentElement;
+
     const nameInput = li.querySelector(".edit-name");
     const descInput = li.querySelector(".edit-desc");
 
@@ -124,6 +151,9 @@ function toggleEdit(btn, index) {
         btn.textContent = "Edit";
 
         saveData();
+
+        autoResize(nameInput);
+        autoResize(descInput);
     }
 }
 
@@ -138,11 +168,13 @@ function uploadImage(event, index) {
     if (!file) return;
 
     const reader = new FileReader();
+
     reader.onload = function (e) {
         confidants[index].img = e.target.result;
         saveData();
         renderConfidants();
     };
+
     reader.readAsDataURL(file);
 }
 
@@ -156,10 +188,12 @@ function changeBackground() {
         if (!file) return;
 
         const reader = new FileReader();
+
         reader.onload = function (e) {
             document.body.style.backgroundImage = `url(${e.target.result})`;
             localStorage.setItem("backgroundImage", e.target.result);
         };
+
         reader.readAsDataURL(file);
     };
 

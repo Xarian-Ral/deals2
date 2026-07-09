@@ -62,8 +62,14 @@ function renderConfidants() {
         const li = document.createElement("li");
 
         li.innerHTML = `
-            <img src="images/arcana/${c.arcana ? c.arcana.replace(/ /g, '-') : 'cardback'}.png"
-                 class="arcana-img">
+            <div class="arcana-container">
+                <img src="images/arcana/${c.arcana ? c.arcana.replace(/ /g, '-') : 'cardback'}.png"
+                     class="arcana-img ${c.reversed ? 'reversed' : ''}">
+                <button class="reverse-btn ${c.reversed ? 'active' : ''}"
+                        onclick="toggleReverse(${index})"
+                        title="Reverse Arcana">⟲</button>
+                ${c.reversed ? `<span class="reverse-label">Reverse</span>` : ""}
+            </div>
 
             <div class="confidant-left">
                 <img src="${c.img || 'images/default.png'}" class="profile-img">
@@ -114,7 +120,8 @@ function addConfidant() {
         name,
         desc,
         img: "",
-        arcana: ""
+        arcana: "",
+        reversed: false
     });
 
     saveData();
@@ -159,6 +166,12 @@ function toggleEdit(btn, index) {
 
 function changeArcana(index, value) {
     confidants[index].arcana = value;
+    saveData();
+    renderConfidants();
+}
+
+function toggleReverse(index) {
+    confidants[index].reversed = !confidants[index].reversed;
     saveData();
     renderConfidants();
 }

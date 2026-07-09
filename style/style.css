@@ -117,7 +117,18 @@ li:hover {
                 0 0 35px rgba(11, 60, 93, 0.4);
 }
 
-/* ARCANA */
+/* =========================
+   ARCANA + REVERSE TOGGLE
+========================= */
+
+/* Wraps the arcana image + reverse button so the button
+   can be positioned in the top-right corner of the image */
+.arcana-container {
+    position: relative;
+    width: 80px;
+    flex-shrink: 0;
+}
+
 .arcana-img {
     width: 80px;
     height: auto;
@@ -129,6 +140,71 @@ li:hover {
 li:hover .arcana-img {
     filter: drop-shadow(0 0 10px rgba(50,140,193,0.8));
     transform: scale(1.05);
+}
+
+/* FLIPPED (REVERSED) ARCANA IMAGE */
+.arcana-img.reversed {
+    transform: rotate(180deg);
+}
+
+/* When reversed, hover glow turns red instead of blue */
+li:hover .arcana-img.reversed {
+    transform: rotate(180deg) scale(1.05);
+    filter: drop-shadow(0 0 10px rgba(220,38,38,0.8));
+}
+
+/* REVERSE TOGGLE BUTTON - top right corner of arcana image */
+.reverse-btn {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: white;
+    font-size: 0.8rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    z-index: 2;
+}
+
+.reverse-btn:hover {
+    background: rgba(220,38,38,0.3);
+    border-color: rgba(220,38,38,0.7);
+    box-shadow: 0 0 10px rgba(220,38,38,0.8);
+}
+
+.reverse-btn.active {
+    background: rgba(220,38,38,0.55);
+    border-color: rgba(220,38,38,0.9);
+}
+
+.arcana-container:hover .reverse-btn.active {
+    box-shadow: 0 0 12px rgba(220,38,38,0.9);
+}
+
+/* "Reverse" LABEL - shown under the arcana image when reversed */
+.reverse-label {
+    display: block;
+    text-align: center;
+    margin-top: 4px;
+    font-size: 0.7rem;
+    letter-spacing: 0.5px;
+    color: #ef4444;
+    text-shadow: 0 0 6px rgba(239,68,68,0.7);
+    transition: text-shadow 0.25s ease;
+}
+
+/* Faint red glow on the "Reverse" label when hovering the arcana area */
+.arcana-container:hover .reverse-label {
+    text-shadow: 0 0 10px rgba(239,68,68,1), 0 0 18px rgba(239,68,68,0.5);
 }
 
 /* PROFILE */
